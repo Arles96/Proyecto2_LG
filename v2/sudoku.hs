@@ -176,55 +176,6 @@ board_9x9 = [[0, 6, 0, 1, 0, 4, 0, 5, 0],
            [0, 0, 7, 2, 0, 6, 9, 0, 0],
            [0, 4, 0, 5, 0, 8, 0, 7, 0]]
 
-toStr4 :: String
-toStr4 = show (board_4x4 !!0)
-         ++ "<br>"
-         ++ show (board_4x4 !!1)
-         ++ "<br>"
-         ++ show (board_4x4 !!2)
-         ++ "<br>"
-         ++ show (board_4x4 !!3)
-
-toStr9 :: String
-toStr9 = show (board_9x9 !!0)
-         ++ "<br>"
-         ++ show (board_9x9 !!1)
-         ++ "<br>"
-         ++ show (board_9x9 !!2)
-         ++ "<br>"
-         ++ show (board_9x9 !!3)
-         ++ "<br>"
-         ++ show (board_9x9 !!4)
-         ++ "<br>"
-         ++ show (board_9x9 !!5)
-         ++ "<br>"
-         ++ show (board_9x9 !!6)         
-         ++ "<br>"
-         ++ show (board_9x9 !!7)
-         ++ "<br>"
-         ++ show (board_9x9 !!8)
-         ++ "<br>"
-
-toStr9_solved :: String
-toStr9_solved = show ((solve board_9x9) !!0)
-         ++ "<br>"
-         ++ show (board_9x9 !!1)
-         ++ "<br>"
-         ++ show (board_9x9 !!2)
-         ++ "<br>"
-         ++ show (board_9x9 !!3)
-         ++ "<br>"
-         ++ show (board_9x9 !!4)
-         ++ "<br>"
-         ++ show (board_9x9 !!5)
-         ++ "<br>"
-         ++ show (board_9x9 !!6)         
-         ++ "<br>"
-         ++ show (board_9x9 !!7)
-         ++ "<br>"
-         ++ show (board_9x9 !!8)
-         ++ "<br>"
-
 {-----------------------------------------------------------------------------
     SVG
 ------------------------------------------------------------------------------}
@@ -243,5 +194,5 @@ setup w = void $ do
 
 strCircle :: String
 strCircle = "<div>"
-         ++  (toStr9) ++ "<br>"
+         ++   string (show board_9x9)
          ++ "</div>"
