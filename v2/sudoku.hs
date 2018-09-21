@@ -139,7 +139,7 @@ backtrack track board step used i j =
             (rmUsed used i j)
             (fst (last step))
             (snd (last step))
-        else -- There are more posibilities... continue. 
+        else -- There are more posibilities... continue.
             backtrack
             (track ++ [board])
             (setposition board (head (subtractArr (possibilities board i j) (used !!i !!j))) i j)
@@ -213,15 +213,14 @@ formatLine board i =
 showSteps :: [[[Int]]] -> Int -> [Char]
 showSteps steps i =
     if (i ==  ((length steps)-1))
-        then ("Solucion:" ++ "<br>" ++ formatLine (steps !!i) 0)
+        then ("<h3>Solucion:" ++ "</h3>" ++ formatLine (steps !!i) 0)
     else
-        (( "Paso #"
+        (( "<h3>Paso #"
             ++ (show i))
-            ++ "<br>"
+            ++ "</h3>"
             ++ (formatLine (steps !!i) 0)
-            ++ "<br>"
             ++ (showSteps steps (succ i))
-            ++ "<br> <br>")
+            ++ "<br>")
 {-----------------------------------------------------------------------------
     Sudoku
 ------------------------------------------------------------------------------}
@@ -239,7 +238,7 @@ setup w = void $ do
                  ]
 
 htmlInject :: String
-htmlInject = "<div>"
+htmlInject = "<div style=\"margin: 10px;\" >"
          ++ "<h2>Sudoku de 9x9 sin resolver</h2>"
          ++ "<div>"--Sudoku 9x9 sin resolver
          ++  (toStr9) ++ "<br>"
@@ -248,7 +247,6 @@ htmlInject = "<div>"
          ++ "<div>"
          ++ (showSteps (solve board_9x9) 0)--coloca el sudoku de 9x9 resuelto
          ++ "</div>"
-         ++ "<br>"
          ++ "<h2>Sudoku de 4x4 sin resolver</h2>"
          ++ "<div>"
          ++ (toStr4) ++ "<br>"
