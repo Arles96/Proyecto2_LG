@@ -176,23 +176,67 @@ board_9x9 = [[0, 6, 0, 1, 0, 4, 0, 5, 0],
            [0, 0, 7, 2, 0, 6, 9, 0, 0],
            [0, 4, 0, 5, 0, 8, 0, 7, 0]]
 
+toStr4 :: String
+toStr4 = show (board_4x4 !!0)
+         ++ "<br>"
+         ++ show (board_4x4 !!1)
+         ++ "<br>"
+         ++ show (board_4x4 !!2)
+         ++ "<br>"
+         ++ show (board_4x4 !!3)
+
+toStr9 :: String
+toStr9 = show (board_9x9 !!0)
+         ++ "<br>"
+         ++ show (board_9x9 !!1)
+         ++ "<br>"
+         ++ show (board_9x9 !!2)
+         ++ "<br>"
+         ++ show (board_9x9 !!3)
+         ++ "<br>"
+         ++ show (board_9x9 !!4)
+         ++ "<br>"
+         ++ show (board_9x9 !!5)
+         ++ "<br>"
+         ++ show (board_9x9 !!6)
+         ++ "<br>"
+         ++ show (board_9x9 !!7)
+         ++ "<br>"
+         ++ show (board_9x9 !!8)
+         ++ "<br>"
 {-----------------------------------------------------------------------------
-    SVG
+    Sudoku
 ------------------------------------------------------------------------------}
 main :: IO ()
 main = startGUI defaultConfig setup
 
 setup :: Window -> UI ()
 setup w = void $ do
-    return w # set title "SVG"
+    return w # set title "Resolución de Sudoku con Haskell"
 
-    heading <- UI.h1 # set text "SVG Two Ways"
+    heading <- UI.h1 # set text "Resolviendo Sudokus con haskell"
 
     getBody w #+ [element heading
-                 , UI.div # set html strCircle #+ [UI.h3 # set text "SVG block as a Haskell string"]
+                 , UI.div # set html strCircle
                  ]
 
 strCircle :: String
 strCircle = "<div>"
-         ++   string (show board_9x9)
+         ++ "<h2>Sudoku de 9x9 sin resolver</h2>"
+         ++ "<div>"--Sudoku 9x9 sin resolver
+         ++  (toStr9) ++ "<br>"
+         ++ "</div>"
+         ++ "<h2>Sudoku de 9x9 resuelto</h2>"
+         ++ "<div>"
+         ++ ""--coloca el sudoku de 9x9 resuelto
+         ++ "</div>"
+         ++ "<br>"
+         ++ "<h2>Sudoku de 4x4 sin resolver</h2>"
+         ++ "<div>"
+         ++ (toStr4) ++ "<br>"
+         ++ "</div>"
+         ++ "<h2>Sudoku de 4x4 resuelto</h2>"
+         ++ "<div>"
+         ++ "" -- colocar el sudoku de 4x4 resuelto
+         ++ "</div>"
          ++ "</div>"
