@@ -204,6 +204,27 @@ toStr9 = show (board_9x9 !!0)
          ++ "<br>"
          ++ show (board_9x9 !!8)
          ++ "<br>"
+
+toStr9_solved :: String
+toStr9_solved = show ((solve board_9x9) !!0)
+         ++ "<br>"
+         ++ show (board_9x9 !!1)
+         ++ "<br>"
+         ++ show (board_9x9 !!2)
+         ++ "<br>"
+         ++ show (board_9x9 !!3)
+         ++ "<br>"
+         ++ show (board_9x9 !!4)
+         ++ "<br>"
+         ++ show (board_9x9 !!5)
+         ++ "<br>"
+         ++ show (board_9x9 !!6)         
+         ++ "<br>"
+         ++ show (board_9x9 !!7)
+         ++ "<br>"
+         ++ show (board_9x9 !!8)
+         ++ "<br>"
+
 {-----------------------------------------------------------------------------
     SVG
 ------------------------------------------------------------------------------}
