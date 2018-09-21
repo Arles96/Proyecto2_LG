@@ -166,9 +166,6 @@ board_4x4 = [[0, 3, 4, 0],
          [1, 0, 0, 3],
          [0, 2, 1, 0]]
 
-strboard_4x4 :: String
-strboard_4x4 = string show board
-
 board_9x9 :: [[Int]]
 board_9x9 = [[0, 6, 0, 1, 0, 4, 0, 5, 0],
            [0, 0, 8, 3, 0, 5, 6, 0, 0],
