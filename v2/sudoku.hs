@@ -121,25 +121,29 @@ possibilities :: [[Int]] -> Int -> Int -> [Int]
 possibilities board i j = subtractArr [1..(length board)] (mapUnavailable board i j)
 -- END: possibilities
 
--- #solve
--- @param [[Int]]
--- @return [[Int]]
--- Calls the backtracking function and returns the completed board
-backtrack :: [[Int]] -> [(Int, Int)] -> [[[Int]]] -> Int -> Int -> [[Int]]
-backtrack board prev used i j =
-    if (isFull board) then board
+-- #backtrack
+-- @param [[[Int]]], [[Int]], [(Int, Int)], [[[Int]]], Int, Int
+-- @return [[[Int]]]
+-- Evaluate each position with its possible values,
+-- Decide whether to return or continue.
+-- Returns the map of every correct step.
+backtrack :: [[[Int]]] -> [[Int]] -> [(Int, Int)] -> [[[Int]]] -> Int -> Int -> [[[Int]]]
+backtrack track board step used i j =
+    if (isFull board) then (track ++ [board]) -- The board is completed... finish.
     else
-        if null (subtractArr (possibilities board i j) (used !!i !!j)) then
+        if null (subtractArr (possibilities board i j) (used !!i !!j)) then -- There aren't more posibilities... return.
             backtrack
-            (setposition board 0 (fst (last prev)) (snd (last prev)))
-            (init prev)
+            (init track)
+            (setposition board 0 (fst (last step)) (snd (last step)))
+            (init step)
             (rmUsed used i j)
-            (fst (last prev))
-            (snd (last prev))
-        else
+            (fst (last step))
+            (snd (last step))
+        else -- There are more posibilities... continue. 
             backtrack
+            (track ++ [board])
             (setposition board (head (subtractArr (possibilities board i j) (used !!i !!j))) i j)
-            (prev ++ (zip [i] [j]))
+            (step ++ (zip [i] [j]))
             (addUsed used (head(subtractArr (possibilities board i j) (used !!i !!j))) i j)
             (fst(indexOf (setposition board (head (subtractArr (possibilities board i j) (used !!i !!j))) i j) i j))
             (snd(indexOf (setposition board (head (subtractArr (possibilities board i j) (used !!i !!j))) i j) i j))
@@ -147,16 +151,10 @@ backtrack board prev used i j =
 
 -- #solve
 -- @param [[Int]]
--- @return [[Int]]
--- Calls the backtracking function and returns the completed board
-solve :: [[Int]] -> [[Int]]
-solve board =
-    backtrack
-    board
-    [(0,0)]
-    (replicate (length board) (replicate (length board) []))
-    (fst(indexOf board 0 0))
-    (snd(indexOf board 0 0))
+-- @return [[[Int]]]
+-- Calls the backtracking function and returns the complete right track of the solution.
+solve :: [[Int]] -> [[[Int]]]
+solve board = tail (backtrack [[[]]] board [(0,0)] (replicate (length board) (replicate (length board) [])) (fst(indexOf board 0 0)) (snd(indexOf board 0 0)))
 -- END: solve
 
 board_4x4 :: [[Int]]
@@ -176,23 +174,86 @@ board_9x9 = [[0, 6, 0, 1, 0, 4, 0, 5, 0],
            [0, 0, 7, 2, 0, 6, 9, 0, 0],
            [0, 4, 0, 5, 0, 8, 0, 7, 0]]
 
+toStr4 :: String
+toStr4 = show (board_4x4 !!0)
+         ++ "<br>"
+         ++ show (board_4x4 !!1)
+         ++ "<br>"
+         ++ show (board_4x4 !!2)
+         ++ "<br>"
+         ++ show (board_4x4 !!3)
+
+toStr9 :: String
+toStr9 = show (board_9x9 !!0)
+         ++ "<br>"
+         ++ show (board_9x9 !!1)
+         ++ "<br>"
+         ++ show (board_9x9 !!2)
+         ++ "<br>"
+         ++ show (board_9x9 !!3)
+         ++ "<br>"
+         ++ show (board_9x9 !!4)
+         ++ "<br>"
+         ++ show (board_9x9 !!5)
+         ++ "<br>"
+         ++ show (board_9x9 !!6)
+         ++ "<br>"
+         ++ show (board_9x9 !!7)
+         ++ "<br>"
+         ++ show (board_9x9 !!8)
+         ++ "<br>"
+
+formatLine:: [[Int]] -> Int -> [Char]
+formatLine board i =
+    if (i ==  ((length board)-1))
+        then (show(board !!i))
+    else
+        ((show (board !!i)) ++ "<br>" ++ (formatLine board (succ i)) ++ "<br>" )
+
+showSteps :: [[[Int]]] -> Int -> [Char]
+showSteps steps i =
+    if (i ==  ((length steps)-1))
+        then ("Solucion:" ++ "<br>" ++ formatLine (steps !!i) 0)
+    else
+        (( "Paso #"
+            ++ (show i))
+            ++ "<br>"
+            ++ (formatLine (steps !!i) 0)
+            ++ "<br>"
+            ++ (showSteps steps (succ i))
+            ++ "<br> <br>")
 {-----------------------------------------------------------------------------
-    SVG
+    Sudoku
 ------------------------------------------------------------------------------}
 main :: IO ()
 main = startGUI defaultConfig setup
 
 setup :: Window -> UI ()
 setup w = void $ do
-    return w # set title "SVG"
+    return w # set title "Resolución de Sudoku con Haskell"
 
-    heading <- UI.h1 # set text "SVG Two Ways"
+    heading <- UI.h1 # set text "Resolviendo Sudokus con haskell"
 
     getBody w #+ [element heading
-                 , UI.div # set html strCircle #+ [UI.h3 # set text "SVG block as a Haskell string"]
+                 , UI.div # set html htmlInject
                  ]
 
-strCircle :: String
-strCircle = "<div>"
-         ++   string (show board_9x9)
+htmlInject :: String
+htmlInject = "<div>"
+         ++ "<h2>Sudoku de 9x9 sin resolver</h2>"
+         ++ "<div>"--Sudoku 9x9 sin resolver
+         ++  (toStr9) ++ "<br>"
+         ++ "</div>"
+         ++ "<h2>Sudoku de 9x9 resuelto</h2>"
+         ++ "<div>"
+         ++ (showSteps (solve board_9x9) 0)--coloca el sudoku de 9x9 resuelto
+         ++ "</div>"
+         ++ "<br>"
+         ++ "<h2>Sudoku de 4x4 sin resolver</h2>"
+         ++ "<div>"
+         ++ (toStr4) ++ "<br>"
+         ++ "</div>"
+         ++ "<h2>Sudoku de 4x4 resuelto</h2>"
+         ++ "<div>"
+         ++ (showSteps (solve board_4x4) 0) -- colocar el sudoku de 4x4 resuelto
          ++ "</div>"

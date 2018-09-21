@@ -127,7 +127,7 @@ backtrack track board step used i j =
         if null (subtractArr (possibilities board i j) (used !!i !!j)) then -- There aren't more posibilities... return.
             backtrack
             (init track)
-            (set board 0 (fst (last step)) (snd (last step)))
+            (setposition board 0 (fst (last step)) (snd (last step)))
             (init step)
             (rmUsed used i j)
             (fst (last step))
@@ -135,11 +135,11 @@ backtrack track board step used i j =
         else -- There are more posibilities... continue. 
             backtrack
             (track ++ [board])
-            (set board (head (subtractArr (possibilities board i j) (used !!i !!j))) i j)
+            (setposition board (head (subtractArr (possibilities board i j) (used !!i !!j))) i j)
             (step ++ (zip [i] [j]))
             (addUsed used (head(subtractArr (possibilities board i j) (used !!i !!j))) i j)
-            (fst(indexOf (set board (head (subtractArr (possibilities board i j) (used !!i !!j))) i j) i j))
-            (snd(indexOf (set board (head (subtractArr (possibilities board i j) (used !!i !!j))) i j) i j))
+            (fst(indexOf (setposition board (head (subtractArr (possibilities board i j) (used !!i !!j))) i j) i j))
+            (snd(indexOf (setposition board (head (subtractArr (possibilities board i j) (used !!i !!j))) i j) i j))
 -- END: backtrack
 
 -- #solve
@@ -172,6 +172,6 @@ main = do
     putStrLn "\nTablero original" 
     putStrLn (show board_9x9)
     putStrLn "\nTablero Resuelto" 
-    putStrLn (show (last (solve board_4x4)) )
+    putStrLn (show (solve board_4x4))
     putStrLn ""
 -- END: main
