@@ -1,4 +1,9 @@
 module Main where
+import qualified Graphics.UI.Threepenny as UI hiding (Ord, div, set)
+import           Control.Monad                      (void)
+import           Graphics.UI.Threepenny.Core hiding (Ord, set)
+import qualified Graphics.UI.Threepenny.SVG  as SVG
+
 
 -- >>>>> GENERIC METHODS <<<<<
 
@@ -155,16 +160,14 @@ solve board =
     (snd(indexOf board 0 0))
 -- END: solve
 
--- #main
-main = do
-    let board_4x4 =
-          [[2, 0, 0, 4],
-           [4, 0, 3, 0],
-           [0, 2, 4, 1],
-           [1, 4, 0, 3]]
+board_4x4 :: [[Int]]
+board_4x4 = [[0, 3, 4, 0],
+         [4, 0, 0, 2],
+         [1, 0, 0, 3],
+         [0, 2, 1, 0]]
 
-    let board_9x9 = 
-          [[0, 6, 0, 1, 0, 4, 0, 5, 0],
+board_9x9 :: [[Int]]
+board_9x9 = [[0, 6, 0, 1, 0, 4, 0, 5, 0],
            [0, 0, 8, 3, 0, 5, 6, 0, 0],
            [2, 0, 0, 0, 0, 0, 0, 0, 1],
            [8, 0, 0, 4, 0, 7, 0, 0, 6],
@@ -173,9 +176,13 @@ main = do
            [5, 0, 0, 0, 0, 0, 0, 0, 2],
            [0, 0, 7, 2, 0, 6, 9, 0, 0],
            [0, 4, 0, 5, 0, 8, 0, 7, 0]]
-    putStrLn "\nTablero original" 
-    putStrLn (show board_9x9)
-    putStrLn "\nTablero Resuelto" 
-    putStrLn (show (solve board_9x9) )
-    putStrLn ""
--- END: main
+
+-- #GUI
+main :: IO ()
+main = startGUI defaultConfig setup
+
+setup :: Window -> UI ()
+setup w = void $ do
+
+    getBody w #+ [string "matriz original: ", string (show board_9x9), string "matriz resuelta", string (show (solve board_9x9))]
+                 
